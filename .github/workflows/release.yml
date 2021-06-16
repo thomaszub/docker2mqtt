@@ -79,7 +79,7 @@ jobs:
           args: --target ${{ matrix.arch_rust }}-unknown-linux-${{ matrix.libc }} --release
 
       - name: docker_login
-        run: echo ${{ secrets.DOCKER_ATOKEN }} | docker login -u serowy --password-stdin
+        run: echo ${{ secrets.DOCKER_ATOKEN }} | docker login -u elevator --password-stdin
 
       - name: docker_setup_qemu
         uses: docker/setup-qemu-action@v1
@@ -94,7 +94,7 @@ jobs:
       - name: docker_build_and_push
         run: |
           docker buildx build --push \
-            --tag serowy/docker2mqtt:${{ steps.version_tag.outputs.version }}-${{ matrix.arch_rust }} \
+            --tag elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-${{ matrix.arch_rust }} \
             --platform ${{ matrix.platform }} \
             --file Dockerfile \
             --build-arg SUB_DIR=${{ matrix.arch_rust }}-unknown-linux-${{ matrix.libc }}/ \
@@ -110,30 +110,30 @@ jobs:
         uses: battila7/get-version-action@v2
 
       - name: docker_login
-        run: echo ${{ secrets.DOCKER_ATOKEN }} | docker login -u serowy --password-stdin
+        run: echo ${{ secrets.DOCKER_ATOKEN }} | docker login -u elevator --password-stdin
 
       - name: create_manifest_latest
         run: |
           docker manifest create \
-          serowy/docker2mqtt:latest \
-          --amend serowy/docker2mqtt:${{ steps.version_tag.outputs.version }}-armv7 \
-          --amend serowy/docker2mqtt:${{ steps.version_tag.outputs.version }}-aarch64 \
-          --amend serowy/docker2mqtt:${{ steps.version_tag.outputs.version }}-x86_64
+          elevator/docker2mqtt:latest \
+          --amend elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-armv7 \
+          --amend elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-aarch64 \
+          --amend elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-x86_64
 
       - name: create_manifest_version
         run: |
           docker manifest create \
-          serowy/serowy/docker2mqtt:${{ steps.version_tag.outputs.version }} \
-          --amend serowy/docker2mqtt:${{ steps.version_tag.outputs.version }}-armv7 \
-          --amend serowy/docker2mqtt:${{ steps.version_tag.outputs.version }}-aarch64 \
-          --amend serowy/docker2mqtt:${{ steps.version_tag.outputs.version }}-x86_64
+          elevator/elevator/docker2mqtt:${{ steps.version_tag.outputs.version }} \
+          --amend elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-armv7 \
+          --amend elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-aarch64 \
+          --amend elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-x86_64
 
       - name: push_manifest_latest
         run: |
           docker manifest push \
-          serowy/docker2mqtt:latest
+          elevator/docker2mqtt:latest
 
       - name: push_manifest_version
         run: |
           docker manifest push \
-          serowy/docker2mqtt:${{ steps.version_tag.outputs.version }}
+          elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}
