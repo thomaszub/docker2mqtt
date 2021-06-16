@@ -123,7 +123,7 @@ jobs:
       - name: create_manifest_version
         run: |
           docker manifest create \
-          elevator/elevator/docker2mqtt:${{ steps.version_tag.outputs.version }} \
+          elevator/docker2mqtt:${{ steps.version_tag.outputs.version }} \
           --amend elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-armv7 \
           --amend elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-aarch64 \
           --amend elevator/docker2mqtt:${{ steps.version_tag.outputs.version }}-x86_64
